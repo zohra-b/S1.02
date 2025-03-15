@@ -13,10 +13,10 @@ public class Cinema {
     private CineManagement newCineManagement;
     private Scanner input = new Scanner(System.in);
 
-    public Cinema(){ //NE RECOIT PAS DE PARAMETRES SELON L'ENONCE
+    public Cinema(){
         this.newSeatsManagement = new SeatsManagement();
         this.newCineManagement = new CineManagement(this);
-        askForStartingDatas(); // inicialitzarà el nombre de files i de seients
+        askForStartingDatas();
     }
 
     public int getTotalRows(){
@@ -29,7 +29,6 @@ public class Cinema {
     public void start() {
         int option;
         do {
-
             option = newCineManagement.displayInitialMenu();
             switch(option){
                 case 1 : newCineManagement.showSeats();
@@ -41,13 +40,13 @@ public class Cinema {
                 case 4 : newCineManagement.cancelBookedSeat();
                     break;
                 case 5 : newCineManagement.cancelUserBookedSeats();
-
+                    break;
 
             }
         } while (option !=0);
     }
 
-    public void askForStartingDatas(){/// Demanarà a l’usuari/ària el nombre de files i seients i els guardarà en els atributs corresponents
+    public void askForStartingDatas(){
         System.out.print("Introdueix el numero de filas");
         this.totalRows = input.nextInt();
         input.nextLine();

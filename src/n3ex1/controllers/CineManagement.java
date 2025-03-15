@@ -1,21 +1,19 @@
 package n3ex1.controllers;
 
-import n3ex1.exceptions.IncorrectRowNumberException;
-import n3ex1.exceptions.IncorrectSeatNumberException;
-import n3ex1.exceptions.IncorrectUserNameException;
-import n3ex1.exceptions.OccupiedSeatException;
+import n3ex1.exceptions.*;
 import n3ex1.models.Cinema;
 import n3ex1.models.Seat;
 
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import static n3ex1.controllers.SeatsManagement.searchSeat;
 import static n3ex1.controllers.SeatsManagement.seats;
 
 public class CineManagement {
-    private Scanner input = new Scanner(System.in);
-    private Cinema cinema;
+    private final Scanner input = new Scanner(System.in);
+    private final Cinema cinema;
 
     public CineManagement(Cinema cinema) {
         this.cinema = cinema;
@@ -23,13 +21,13 @@ public class CineManagement {
 
     public byte displayInitialMenu() {
         System.out.println("""
-        1.- Mostrar totes les butaques reservades.
-        2.- Mostrar les butaques reservades per una persona.
-        3.- Reservar una butaca.
-        4.- Anul·lar la reserva d’una butaca.
-        5.- Anul·lar totes les reserves d’una persona.
-        0.- Sortir.
-        """
+                1.- Mostrar totes les butaques reservades.
+                2.- Mostrar les butaques reservades per una persona.
+                3.- Reservar una butaca.
+                4.- Anul·lar la reserva d’una butaca.
+                5.- Anul·lar totes les reserves d’una persona.
+                0.- Sortir.
+                """
         );
         byte option = input.nextByte();
         input.nextLine();
@@ -38,29 +36,38 @@ public class CineManagement {
     }
 
     public void showSeats() {
-        StringBuilder reservedSeatsList = new StringBuilder();
-        for (Seat seat : seats) {
-            reservedSeatsList.append(seat.toString()).append("\n");
+        try {
+            System.out.println("Aqui tens totes les butaques reservadas:\n" + SeatsManagement.getAllSeats());
+        } catch (NoSeatsReservedException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println("Aqui tens totes les butaques reservadas:\n" + reservedSeatsList);
     }
 
-    public void showSeatsPerUser() {
+    public void showSeatsPerUser() throws UserNotfoundException {
         StringBuilder seatsPerUser = new StringBuilder();
         String name;
+        boolean userFound = false;
         System.out.println("Introdueix el nom del usuari");
         name = input.nextLine();
-        for (int i = 0 ; i < seats.size() ; i++){
-            if (name.equalsIgnoreCase(seats.get(i).getUser())){
+
+        for (int i = 0; i < seats.size(); i++) {
+            if (name.equalsIgnoreCase(seats.get(i).getUser())) {
                 seatsPerUser.append(seats.get(i).toString()).append("\n");
+                userFound = true;
             }
         }
-        System.out.println("Aqui tens totes les butaques reservadas per aquest usuari :\n" + seatsPerUser);
+        if (userFound){
+            System.out.println("Aqui tens totes les butaques reservadas per aquest usuari :\n" + seatsPerUser);
+        } else {
+            throw new UserNotfoundException("L'usuari no té reserves. ");
+        }
+
     }
 
-    public void bookSeat() throws OccupiedSeatException{
-        boolean occupiedSeat = false;
+    public void bookSeat() throws OccupiedSeatException {
+        boolean occupiedSeat;
         do {
+            occupiedSeat = false;
             int row = enterRowNumber();
             int seat = enterSeatNumber();
             try {
@@ -69,12 +76,14 @@ public class CineManagement {
                 } else {
                     String user = enterUser();
                     SeatsManagement.addSeat(row, seat, user);
-                }} catch(OccupiedSeatException e){
-                    System.out.println(e.getMessage());
-                    occupiedSeat = true;
                 }
+            } catch (OccupiedSeatException e) {
+                System.out.println(e.getMessage());
+                occupiedSeat = true;
+            }
         } while (occupiedSeat);
-        }
+    }
+
 
 
     public void cancelBookedSeat() {
@@ -84,27 +93,49 @@ public class CineManagement {
         System.out.println("Numero de seient ?");
         int seat = input.nextInt();
         input.nextLine();
-        SeatsManagement.deleteSeat(row, seat);
-
+        try {
+            int index = searchSeat(row, seat);
+            if (index == -1) {
+                throw new AvailableSeatException("Aquesta butaca no esta ocupada\n");
+            } else {
+                SeatsManagement.deleteSeat(row, seat);
+                System.out.print("La reserva s´ha cancelat. \n");
+            }
+        } catch (AvailableSeatException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public void cancelUserBookedSeats() {
-        enterUser();
-
+    public void cancelUserBookedSeats(){
+        Iterator<Seat> iterator = seats.iterator();
+        String name;
+        System.out.println("Introdueix el nom del usuari");
+        name = input.nextLine();
+        while(iterator.hasNext()){
+            Seat seat = iterator.next();
+            if(seat.getUser().equalsIgnoreCase(name)){
+                iterator.remove();
+            }
+        }
+        System.out.print("S´han cancelat les reserves de l'usuari. \n");
     }
 
     public String enterUser() throws IncorrectUserNameException {
         String user ="";
-        System.out.println("Introdueix el nom de la persona");
+        System.out.println("Introdueix el nom de la persona ");
         String name = input.nextLine();
-        for (char c : name.toCharArray()) {
-            if (Character.isDigit(c)) {
-                throw new IncorrectUserNameException("El nom no pot contenir numeros");
-            } else {
-                user = name;
+        try {
+            for (char c : name.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    throw new IncorrectUserNameException("El nom no pot contenir numeros\n");
+                } else {
+                    user = name;
+                }
             }
+        } catch (IncorrectUserNameException e) {
+            System.out.print(e.getMessage());
         }
-            return user;
+        return user;
     }
 
     public int enterRowNumber() throws IncorrectRowNumberException {

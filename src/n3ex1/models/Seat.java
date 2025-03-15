@@ -21,16 +21,21 @@ public class Seat {
         return this.user;
     }
 
-    public boolean equals(){
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass() ) return false;
+        Seat seat2 = (Seat) obj;
 
-        return true;// Equals: retornarà que dues butaques són iguales si la fila i el seient són iguals.
+        return this.row == seat2.getRow() && this.seat == seat2.getSeat();
+
     }
 
 
 
     @Override
     public String toString(){
-        return "Fila : " + this.row + ", Seient: " + this.seat + " , Persona: " +  this.user;
+        return "Fila : " + this.row + ", Seient: " + this.seat + " , Persona: " +  this.user + "\n";
     }
 }
 
