@@ -56,10 +56,14 @@ public class CineManagement {
                 userFound = true;
             }
         }
-        if (userFound){
-            System.out.println("Aqui tens totes les butaques reservadas per aquest usuari :\n" + seatsPerUser);
-        } else {
-            throw new UserNotfoundException("L'usuari no té reserves. ");
+        try {
+            if (userFound){
+                System.out.println("Aqui tens totes les butaques reservadas per aquest usuari :\n" + seatsPerUser);
+            } else {
+                throw new UserNotfoundException("L'usuari no té reserves. ");
+            }
+        } catch (UserNotfoundException e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -107,18 +111,33 @@ public class CineManagement {
     }
 
     public void cancelUserBookedSeats(){
+        String name = "";
+        boolean bookingCanceled = false;
         Iterator<Seat> iterator = seats.iterator();
-        String name;
-        System.out.println("Introdueix el nom del usuari");
-        name = input.nextLine();
-        while(iterator.hasNext()){
-            Seat seat = iterator.next();
-            if(seat.getUser().equalsIgnoreCase(name)){
-                iterator.remove();
-            }
+
+        try {
+            name = enterUser();
+        } catch (IncorrectUserNameException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.print("S´han cancelat les reserves de l'usuari. \n");
+
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
+            if (seat.getUser().equalsIgnoreCase(name)) {
+                iterator.remove();
+                bookingCanceled = true;
+                    }
+        }
+
+        if(bookingCanceled){
+            System.out.print("S´han cancelat les reserves de l'usuari. \n");
+            } else {
+                System.out.println("Aquest usuari no té reserves");
+            }
+
     }
+
+
 
     public String enterUser() throws IncorrectUserNameException {
         String user ="";
@@ -128,10 +147,10 @@ public class CineManagement {
             for (char c : name.toCharArray()) {
                 if (Character.isDigit(c)) {
                     throw new IncorrectUserNameException("El nom no pot contenir numeros\n");
-                } else {
-                    user = name;
                 }
-            }
+                }
+            user = name;
+
         } catch (IncorrectUserNameException e) {
             System.out.print(e.getMessage());
         }
