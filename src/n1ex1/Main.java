@@ -1,6 +1,10 @@
 package n1ex1;
 
-public class N1Ex1 {
+import n1ex1.exceptions.VoidSaleException;
+import n1ex1.models.Product;
+import n1ex1.models.Sale;
+
+public class Main {
     public static void main(String[] args) {
         Sale sales = new Sale();
 

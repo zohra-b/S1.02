@@ -1,4 +1,6 @@
-package n1ex1;
+package n1ex1.models;
+import n1ex1.exceptions.VoidSaleException;
+
 import java.util.ArrayList;
 
 public class Sale {

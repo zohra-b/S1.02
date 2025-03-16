@@ -1,4 +1,4 @@
-package n1ex1;
+package n1ex1.models;
 
 public class Product {
         /// 1 fields
