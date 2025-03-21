@@ -31,6 +31,7 @@ public class CineManagement {
                 """
         );
         byte option = SC.nextByte();
+        SC.nextLine();
         return option;
 
     }
