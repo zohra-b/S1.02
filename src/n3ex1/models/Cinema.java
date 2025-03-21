@@ -9,14 +9,15 @@ public class Cinema {
 
     private int totalRows;
     private int seatsPerRow;
-    private SeatsManagement newSeatsManagement;
-    private CineManagement newCineManagement;
+    //private final SeatsManagement newSeatsManagement;
+    private final CineManagement newCineManagement;
     private Scanner input = new Scanner(System.in);
 
     public Cinema(){
-        this.newSeatsManagement = new SeatsManagement();
+        //this.newSeatsManagement = new SeatsManagement();
         this.newCineManagement = new CineManagement(this);
         askForStartingDatas();
+        newCineManagement.start();
     }
 
     public int getTotalRows(){
@@ -24,26 +25,6 @@ public class Cinema {
     }
     public int getSeatsPerRow(){
         return this.seatsPerRow;
-    }
-
-    public void start() {
-        int option;
-        do {
-            option = newCineManagement.displayInitialMenu();
-            switch(option){
-                case 1 : newCineManagement.showSeats();
-                    break;
-                case 2 : newCineManagement.showSeatsPerUser();
-                    break;
-                case 3 : newCineManagement.bookSeat();
-                    break;
-                case 4 : newCineManagement.cancelBookedSeat();
-                    break;
-                case 5 : newCineManagement.cancelUserBookedSeats();
-                    break;
-
-            }
-        } while (option !=0);
     }
 
     public void askForStartingDatas(){

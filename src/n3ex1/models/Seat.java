@@ -1,5 +1,7 @@
 package n3ex1.models;
 
+import java.util.Objects;
+
 public class Seat {
     private int row;
     private int seat;
@@ -22,6 +24,11 @@ public class Seat {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(row, seat, user);
+    }
+
+    @Override
     public boolean equals(Object obj){
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass() ) return false;
@@ -30,8 +37,6 @@ public class Seat {
         return this.row == seat2.getRow() && this.seat == seat2.getSeat();
 
     }
-
-
 
     @Override
     public String toString(){

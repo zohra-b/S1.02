@@ -6,13 +6,18 @@ import n3ex1.models.Seat;
 import java.util.ArrayList;
 
 public class SeatsManagement {
-    static ArrayList<Seat> seats;
+    private ArrayList<Seat> seats;
 
     public SeatsManagement() {
         seats = new ArrayList<>();
     }
 
-    public static StringBuilder getAllSeats() throws NoSeatsReservedException {
+
+    public ArrayList<Seat> getSeats() {
+        return seats;
+    }
+
+    public StringBuilder getAllSeats() throws NoSeatsReservedException {
         StringBuilder reservedSeatsList = new StringBuilder();
         if (seats.isEmpty()) {
             throw new NoSeatsReservedException("No hi ha cap butaca reservada.");
@@ -24,19 +29,19 @@ public class SeatsManagement {
         return reservedSeatsList;
     }
 
-    public static void addSeat (int row, int seat, String user) {
+    public void addSeat (int row, int seat, String user) {
         Seat newSeat = new Seat(row, seat, user);
         seats.add(newSeat);
         System.out.print(newSeat);
     }
 
-    public static void deleteSeat(int row, int seat) throws AvailableSeatException {
+    public void deleteSeat(int row, int seat) throws AvailableSeatException {
            int index = searchSeat(row, seat);
                 seats.remove(index);
             }
 
 
-    public static int searchSeat(int row, int seat) {
+    public int searchSeat(int row, int seat) {
         int seatIndex = -1;
         Seat seat1 = new Seat(row, seat, "");
         for (int i = 0; i < seats.size(); i++) {

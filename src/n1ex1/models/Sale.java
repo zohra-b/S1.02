@@ -18,21 +18,31 @@ public class Sale {
         return this.totalPrice;
     }
 
-    public void addProducts(Product product) {
+    public void setTotalPrice() throws VoidSaleException{
+        try {
+            this.totalPrice = calculateTotal();
+        } catch (VoidSaleException e){
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    public void addProduct(Product product) {
         this.products.add(product);
     }
 
+
     public int calculateTotal() throws VoidSaleException {
-        int totalPrice = 0;
-        if (this.products.isEmpty()) {
+             if (this.products.isEmpty()) {
             throw new VoidSaleException();
         } else {
             for(Product p : this.products) {
                 int price = p.getPrice();
                 totalPrice += price;
             }
-
             return totalPrice;
         }
     }
+
+
 }

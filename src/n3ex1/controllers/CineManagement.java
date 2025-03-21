@@ -4,19 +4,20 @@ import n3ex1.exceptions.*;
 import n3ex1.models.Cinema;
 import n3ex1.models.Seat;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import static n3ex1.controllers.SeatsManagement.searchSeat;
-import static n3ex1.controllers.SeatsManagement.seats;
 
 public class CineManagement {
-    private final Scanner input = new Scanner(System.in);
+    private final Scanner SC = new Scanner(System.in);
+    private final SeatsManagement seatsManagement;
     private final Cinema cinema;
 
     public CineManagement(Cinema cinema) {
         this.cinema = cinema;
+        this.seatsManagement = new SeatsManagement();
     }
 
     public byte displayInitialMenu() {
@@ -29,15 +30,33 @@ public class CineManagement {
                 0.- Sortir.
                 """
         );
-        byte option = input.nextByte();
-        input.nextLine();
+        byte option = SC.nextByte();
         return option;
 
     }
 
+    public void start() {
+        int option;
+        do {
+            option = displayInitialMenu();
+            switch(option){
+                case 1 : showSeats();
+                    break;
+                case 2 : showSeatsPerUser();
+                    break;
+                case 3 : bookSeat();
+                    break;
+                case 4 : cancelBookedSeat();
+                    break;
+                case 5 : cancelUserBookedSeats();
+                    break;
+
+            }
+        } while (option !=0);
+    }
     public void showSeats() {
         try {
-            System.out.println("Aqui tens totes les butaques reservadas:\n" + SeatsManagement.getAllSeats());
+            System.out.println("Aqui tens totes les butaques reservadas:\n" + seatsManagement.getAllSeats());
         } catch (NoSeatsReservedException e) {
             System.out.println(e.getMessage());
         }
@@ -48,11 +67,11 @@ public class CineManagement {
         String name;
         boolean userFound = false;
         System.out.println("Introdueix el nom del usuari");
-        name = input.nextLine();
+        name = SC.nextLine();
 
-        for (int i = 0; i < seats.size(); i++) {
-            if (name.equalsIgnoreCase(seats.get(i).getUser())) {
-                seatsPerUser.append(seats.get(i).toString()).append("\n");
+        for (int i = 0; i < seatsManagement.getSeats().size(); i++) {
+            if (name.equalsIgnoreCase(seatsManagement.getSeats().get(i).getUser())) {
+                seatsPerUser.append(seatsManagement.getSeats().get(i).toString()).append("\n");
                 userFound = true;
             }
         }
@@ -75,11 +94,11 @@ public class CineManagement {
             int row = enterRowNumber();
             int seat = enterSeatNumber();
             try {
-                if (searchSeat(row, seat) != -1) {
+                if (seatsManagement.searchSeat(row, seat) != -1) {
                     throw new OccupiedSeatException("Aquesta butaca ja esta ocupada");
                 } else {
                     String user = enterUser();
-                    SeatsManagement.addSeat(row, seat, user);
+                    seatsManagement.addSeat(row, seat, user);
                 }
             } catch (OccupiedSeatException e) {
                 System.out.println(e.getMessage());
@@ -92,17 +111,17 @@ public class CineManagement {
 
     public void cancelBookedSeat() {
         System.out.println("Numero de fila ?");
-        int row = input.nextInt();
-        input.nextLine();
+        int row = SC.nextInt();
+        SC.nextLine();
         System.out.println("Numero de seient ?");
-        int seat = input.nextInt();
-        input.nextLine();
+        int seat = SC.nextInt();
+        SC.nextLine();
         try {
-            int index = searchSeat(row, seat);
+            int index = seatsManagement.searchSeat(row, seat);
             if (index == -1) {
                 throw new AvailableSeatException("Aquesta butaca no esta ocupada\n");
             } else {
-                SeatsManagement.deleteSeat(row, seat);
+                seatsManagement.deleteSeat(row, seat);
                 System.out.print("La reserva s´ha cancelat. \n");
             }
         } catch (AvailableSeatException e) {
@@ -113,7 +132,7 @@ public class CineManagement {
     public void cancelUserBookedSeats(){
         String name = "";
         boolean bookingCanceled = false;
-        Iterator<Seat> iterator = seats.iterator();
+        Iterator<Seat> iterator = seatsManagement.getSeats().iterator();
 
         try {
             name = enterUser();
@@ -142,7 +161,7 @@ public class CineManagement {
     public String enterUser() throws IncorrectUserNameException {
         String user ="";
         System.out.println("Introdueix el nom de la persona ");
-        String name = input.nextLine();
+        String name = SC.nextLine();
         try {
             for (char c : name.toCharArray()) {
                 if (Character.isDigit(c)) {
@@ -163,8 +182,8 @@ public class CineManagement {
         do {
             System.out.println("Quin és el numero de fila");
             try {
-                rowNumber = input.nextInt();
-                input.nextLine();
+                rowNumber = SC.nextInt();
+                SC.nextLine();
                 if (rowNumber >= 1 && rowNumber <= cinema.getTotalRows()) {
                     validInput = true;
                 } else {
@@ -175,7 +194,7 @@ public class CineManagement {
 
             } catch (InputMismatchException e) {
                 System.out.println("El número de fila ha de ser un enter");
-                input.nextLine();
+                SC.nextLine();
             }
         } while (!validInput);
         return rowNumber;
@@ -187,8 +206,8 @@ public class CineManagement {
         System.out.println("Quin és el numero de seient");
         do {
             try {
-                seatNumber = input.nextInt();
-                input.nextLine();
+                seatNumber = SC.nextInt();
+                SC.nextLine();
                 if (seatNumber >= 1 && seatNumber <= cinema.getSeatsPerRow()) {
                     validInput = true;
                 } else {
@@ -199,7 +218,7 @@ public class CineManagement {
 
             } catch (InputMismatchException e){
                 System.out.println("El número de seient ha de ser un enter");
-                input.nextLine();
+                SC.nextLine();
             }
         } while (!validInput);
         return seatNumber;

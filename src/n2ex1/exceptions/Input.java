@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Input {
-    private static Scanner input = new Scanner(System.in);
+    private static final Scanner SC = new Scanner(System.in);
 
     /// ////INPUT MISMATCH EXCEPTIONS`
     public static byte readByte(String message) {
@@ -14,13 +14,12 @@ public class Input {
 
         while (!isByte) {
             try {
-                data = input.nextByte();
-                input.nextLine();
+                data = SC.nextByte();
                 isByte = true;
 
             } catch (InputMismatchException ime) {
                 System.out.println("You must enter an entire number \n" + message);
-                input.nextLine();
+                SC.nextLine();
 
             }
         }
@@ -35,11 +34,11 @@ public class Input {
 
         while (!isInt) {
             try {
-                data = input.nextInt();
+                data = SC.nextInt();
                 isInt = true;
             } catch (InputMismatchException ime) {
                 System.out.println("You must enter an integer \n" + message);
-                input.nextLine();
+                SC.nextLine();
             }
         }
         return data;
@@ -52,12 +51,12 @@ public class Input {
         System.out.println(message);
         while (!isFloat) {
             try {
-                data = input.nextFloat();
+                data = SC.nextFloat();
                 isFloat = true;
-                input.nextLine();
+                SC.nextLine();
             } catch (InputMismatchException ime) {
                 System.out.println("You must enter a float \n" + message);
-                input.nextLine();
+                SC.nextLine();
             }
         }
         return data;
@@ -70,12 +69,12 @@ public class Input {
         System.out.println(message);
         while (!isDouble) {
             try {
-                data = input.nextDouble();
+                data = SC.nextDouble();
                 isDouble = true;
-                input.nextLine();
+                SC.nextLine();
             } catch (InputMismatchException ime) {
                 System.out.println("You must enter a double \n" + message);
-                input.nextLine();
+                SC.nextLine();
             }
         }
         return data;
@@ -87,14 +86,14 @@ public class Input {
         String entry = "";
 
         System.out.println(message);
-        entry = input.next();
+        entry = SC.next();
         if (entry.length() > 1) {
             throw new CustomInputException("You must enter only one character");
         } else if (entry.isEmpty()) {
             throw new CustomInputException("You must enter at least one character");
         }
         data = entry.charAt(0);
-        input.nextLine();
+        SC.nextLine();
 
         return data;
     }
@@ -103,7 +102,7 @@ public class Input {
         String data;
 
         System.out.println(message);
-        data = input.nextLine();
+        data = SC.nextLine();
         if (data.isEmpty()) {
             throw new CustomInputException("Enter something");
         }
@@ -113,7 +112,7 @@ public class Input {
     public static boolean readYesNo(String message) throws CustomInputException {
         String data;
         System.out.println(message);
-        data = input.next();
+        data = SC.next();
         boolean myBoolean = false;
         if (data.isEmpty()) {
             throw new CustomInputException("You must enter something");
