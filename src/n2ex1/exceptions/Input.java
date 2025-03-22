@@ -121,7 +121,7 @@ public class Input {
         } else if (data.charAt(0) == 'y') {
             myBoolean = true;
         } else if (data.charAt(0) == 'n') {
-            myBoolean = myBoolean;
+            myBoolean = false;
         }
     return myBoolean;
     }

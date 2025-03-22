@@ -4,4 +4,7 @@ public class VoidSaleException extends Exception {
     public VoidSaleException() {
         super("You need to add products before you can make any sale");
     }
+    public VoidSaleException(String message) {
+        super(message);
+    }
 }

@@ -4,7 +4,6 @@ import n3ex1.exceptions.*;
 import n3ex1.models.Cinema;
 import n3ex1.models.Seat;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;

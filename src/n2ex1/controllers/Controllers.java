@@ -10,18 +10,10 @@ public class Controllers {
         boolean isBoolean = false;
 
 
-        byte age = Input.readByte("Enter your age");
-        System.out.println(age);
-
-        int year = Input.readInt("Enter your birth year");
-        System.out.println(year);
-
-        float weight = Input.readFloat("Enter your weight");
-        System.out.println(weight);
-
-        double doubleNumber = Input.readDouble("Enter un double");
-        System.out.println(doubleNumber);
-
+        System.out.println(Input.readByte("readByte() method \n Enter your age"));
+        System.out.println(Input.readInt("readInt() method \n Enter your birth year"));
+        System.out.println(Input.readFloat("readFloat() method \nEnter your weight"));
+        System.out.println(Input.readDouble("readDouble() \n Enter un double"));
 
         while(!isChar) {
             try {
