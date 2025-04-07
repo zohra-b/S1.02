@@ -35,22 +35,36 @@ public class SeatsManagement {
         System.out.print(newSeat);
     }
 
-    public void deleteSeat(int row, int seat) throws AvailableSeatException {
-           int index = searchSeat(row, seat);
-                seats.remove(index);
-            }
+    public void deleteSeat(int row, int seat) {
+        try {
+            int index = searchSeat(row, seat);
+            seats.remove(index);
+        } catch (AvailableSeatException e) {
+           System.out.println( e.getMessage());
+        }
+    }
 
+    public int searchSeat(int row, int seat) throws AvailableSeatException{
 
-    public int searchSeat(int row, int seat) {
-        int seatIndex = -1;
         Seat seat1 = new Seat(row, seat, "");
         for (int i = 0; i < seats.size(); i++) {
             if (seat1.equals(seats.get(i))){
-                seatIndex = i;
+                return i;
             }
         }
-        return seatIndex;
+        throw new AvailableSeatException("Aquesta butaca no esta reservada");
     }
+
+//    public int searchSeat(int row, int seat) {
+//        int seatIndex = -1;
+//        Seat seat1 = new Seat(row, seat, "");
+//        for (int i = 0; i < seats.size(); i++) {
+//            if (seat1.equals(seats.get(i))){
+//                seatIndex = i;
+//            }
+//        }
+//        return seatIndex;
+//    }
 }
 
 

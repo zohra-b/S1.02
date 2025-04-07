@@ -18,7 +18,8 @@ public class Sale {
         return this.totalPrice;
     }
 
-    public void setTotalPrice() throws VoidSaleException{
+    public void setTotalPrice() { // Si estamos capturando una excepción no es necesario
+                                    // declarar que el método arrojará una excepción:
         try {
             this.totalPrice = calculateTotal();
         } catch (VoidSaleException e){

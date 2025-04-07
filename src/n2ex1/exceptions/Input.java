@@ -113,18 +113,17 @@ public class Input {
         String data;
         System.out.println(message);
         data = SC.next();
-        boolean myBoolean = false;
+
         if (data.isEmpty()) {
             throw new CustomInputException("You must enter something");
-        } else if ((data.charAt(0) != 'y') && (data.charAt(0) != 'n')) {
-            throw new CustomInputException("You must enter Y for yes or N for no");
         } else if (data.charAt(0) == 'y') {
-            myBoolean = true;
+            return true;
         } else if (data.charAt(0) == 'n') {
-            myBoolean = false;
+            return false;
+        } else {
+            throw new CustomInputException("You must enter Y for yes or N for no");
+
         }
-    return myBoolean;
+
     }
-
-
 }

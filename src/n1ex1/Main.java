@@ -13,17 +13,28 @@ public class Main {
         sale.addProduct(product1);
         sale.addProduct(product2);
 
-        try {
-            sale.calculateTotal();
-        } catch (VoidSaleException vse) {
-            System.out.println(vse.getMessage());
-        }
+//        try {
+//            sale.calculateTotal();
+//        } catch (VoidSaleException vse) {
+//            System.out.println(vse.getMessage());
+//        }
+//
+//        try {
+//            sale.getProducts().get(1);
+//        } catch (IndexOutOfBoundsException iobe) {
+//            System.out.println(iobe.getMessage());
+//        }
 
         try {
-            sale.getProducts().get(1);
-        } catch (IndexOutOfBoundsException iobe) {
+            System.out.println(sale.calculateTotal());
+            System.out.println(sale.getProducts().get(1));
+        } catch (VoidSaleException vse) {
+            System.out.println(vse.getMessage());
+        }  catch (IndexOutOfBoundsException iobe) {
             System.out.println(iobe.getMessage());
         }
+
+
 
     }
 }
