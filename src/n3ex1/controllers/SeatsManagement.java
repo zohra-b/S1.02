@@ -55,16 +55,7 @@ public class SeatsManagement {
         throw new AvailableSeatException("Aquesta butaca no esta reservada");
     }
 
-//    public int searchSeat(int row, int seat) {
-//        int seatIndex = -1;
-//        Seat seat1 = new Seat(row, seat, "");
-//        for (int i = 0; i < seats.size(); i++) {
-//            if (seat1.equals(seats.get(i))){
-//                seatIndex = i;
-//            }
-//        }
-//        return seatIndex;
-//    }
+
 }
 
 

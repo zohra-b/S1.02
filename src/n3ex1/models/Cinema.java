@@ -1,7 +1,7 @@
 package n3ex1.models;
 
 import n3ex1.controllers.CineManagement;
-import n3ex1.controllers.SeatsManagement;
+
 
 import java.util.Scanner;
 
@@ -9,12 +9,10 @@ public class Cinema {
 
     private int totalRows;
     private int seatsPerRow;
-    //private final SeatsManagement newSeatsManagement;
     private final CineManagement newCineManagement;
-    private Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(System.in);
 
     public Cinema(){
-        //this.newSeatsManagement = new SeatsManagement();
         this.newCineManagement = new CineManagement(this);
         askForStartingDatas();
         newCineManagement.start();

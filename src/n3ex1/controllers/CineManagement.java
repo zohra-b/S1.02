@@ -66,45 +66,8 @@ public class CineManagement {
         }
     }
 
-//    public void showSeatsPerUser() /*throws UserNotfoundException*/ { //pas besoin de propager l'exception : un utilisateur peut ne pas avoir de siege, ça ne remet pas en cause le systeme
-
-    /// /        Mélange des responsabilités :
-    /// /       La méthode fait trop de choses :
-    /// /        Cherche les sièges
-    /// /        Gère les erreurs (au lieu de laisser l'appelant le faire)
-    /// /❌ Utilisation inutile d'un flag (userFound) :
-    /// /       On peut simplifier en lançant directement l'exception si l'utilisateur n'est pas trouvé.
-    /// /❌ throws + try-catch dans la même méthode :
-    /// /       Incohérent : si une méthode déclare throws, elle devrait laisser l'appelant gérer l'erreur.
-//
-//
-//        StringBuilder seatsPerUser = new StringBuilder();
-//        String name;
-//        //boolean userFound = false; // pas la peine puisqu'on a l'exeption userNotfoundException
-//        System.out.println("Introdueix el nom del usuari");
-//        name = SC.nextLine();
-//
-//        for (int i = 0; i < seatsManagement.getSeats().size(); i++) {
-//            if (name.equalsIgnoreCase(seatsManagement.getSeats().get(i).getUser())) {
-//                seatsPerUser.append(seatsManagement.getSeats().get(i).toString()).append("\n");
-//                //userFound = true;
-//            }
-//        }
-//        try {
-//            //if (userFound){  // remplacé par un if : si SeatsperUser est vide
-//            if(seatsPerUser.isEmpty()){
-//                throw new UserNotfoundException("L'usuari no té reserves. ");
-//            }
-//                System.out.println("Aqui tens totes les butaques reservadas per aquest usuari :\n" + seatsPerUser);
-//        } catch (UserNotfoundException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//    }
     public List<Seat> findSeatsPerUser() {
         String name = "";
-//        System.out.println("Introdueix el nom del usuari");
-//        String name = SC.nextLine();
         try {
             name = enterUser();
         } catch (IncorrectUserNameException e) {
@@ -143,14 +106,15 @@ public class CineManagement {
             try {
                 if (seatsManagement.searchSeat(row, seat) != -1) {
                     throw new OccupiedSeatException("Aquesta butaca ja esta ocupada");
-                } else {
-                    String user = enterUser();
-                    seatsManagement.addSeat(row, seat, user);
                 }
             } catch (OccupiedSeatException e) {
                 System.out.println(e.getMessage());
                 occupiedSeat = true;
+            } catch (AvailableSeatException e) {
+                String user = enterUser();
+                seatsManagement.addSeat(row, seat, user);
             }
+
         } while (occupiedSeat);
     }
 
@@ -169,31 +133,6 @@ public class CineManagement {
             System.out.println(e.getMessage());
         }
     }
-
-//    public void cancelBookedSeat() {
-//        System.out.println("Numero de fila ?");
-//        int row = SC.nextInt();
-//        SC.nextLine();
-//        System.out.println("Numero de seient ?");
-//        int seat = SC.nextInt();
-//        SC.nextLine();
-//        try {
-//            int index = seatsManagement.searchSeat(row, seat);
-//            if (index == -1) {
-//                throw new AvailableSeatException("Aquesta butaca no esta ocupada\n");
-//            } else {
-//                seatsManagement.deleteSeat(row, seat);
-//                System.out.print("La reserva s´ha cancelat. \n");
-//            }
-//        } catch (AvailableSeatException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
-
-//    / ///////////**********************************************   ATTENTION RESTE A CHANGER CANCEL USER BOOKED SEATS SACHANT QUE JAI SEPARE
-//    / SHOWSEATSPERUSER EN DEUX METHODES : FINDSEATSPERUSER ET SHOWSEATSPERUSER
-//    / IDEALEMENT IL FAUDRAIT UTILISER FIND SEATS PER USER DANS CETTE METHODE POUR QUELLE NE FASSE PAS PLS CHOSES A LA FOIS"*****///////
 
 
     public void cancelUserBookedSeats(){
@@ -241,24 +180,6 @@ public class CineManagement {
         return user;
     }
 
-//    public String enterUser() throws IncorrectUserNameException {
-//        String user ="";
-//        System.out.println("Introdueix el nom de la persona ");
-//        String name = SC.nextLine();
-//        try {
-//            for (char c : name.toCharArray()) {
-//                if (Character.isDigit(c)) {
-//                    throw new IncorrectUserNameException("El nom no pot contenir numeros\n");
-//                }
-//                }
-//            user = name;
-//
-//        } catch (IncorrectUserNameException e) {
-//            System.out.print(e.getMessage());
-//        }
-//        return user;
-//    }
-
     public int enterRowNumber() {
         int rowNumber = 0 ;
 
@@ -281,30 +202,6 @@ public class CineManagement {
         return rowNumber;
     }
 
-//    public int enterRowNumber() throws IncorrectRowNumberException {
-//        int rowNumber = 0 ;
-//        boolean validInput = false;
-//        do {
-//            System.out.println("Quin és el numero de fila");
-//            try {
-//                rowNumber = SC.nextInt();
-//                SC.nextLine();
-//                if (rowNumber >= 1 && rowNumber <= cinema.getTotalRows()) {
-//                    validInput = true;
-//                } else {
-//                    throw new IncorrectRowNumberException("Fila incorrecta");
-//                }
-//            } catch (IncorrectRowNumberException e) {
-//                System.out.println(e.getMessage());
-//
-//            } catch (InputMismatchException e) {
-//                System.out.println("El número de fila ha de ser un enter");
-//                SC.nextLine();
-//            }
-//        } while (!validInput);
-//        return rowNumber;
-//    }
-
     public int enterSeatNumber() throws IncorrectSeatNumberException {
         int seatNumber = 0;
 
@@ -326,29 +223,7 @@ public class CineManagement {
         } while (seatNumber < 1 || seatNumber > cinema.getSeatsPerRow());
         return seatNumber;
     }
-//    public int enterSeatNumber() throws IncorrectSeatNumberException {
-//        int seatNumber = 0;
-//        boolean validInput = false;
-//        System.out.println("Quin és el numero de seient");
-//        do {
-//            try {
-//                seatNumber = SC.nextInt();
-//                SC.nextLine();
-//                if (seatNumber >= 1 && seatNumber <= cinema.getSeatsPerRow()) {
-//                    validInput = true;
-//                } else {
-//                    throw new IncorrectSeatNumberException("Numero de seient incorrecte. Introdueix un numero de seient");
-//                }
-//            } catch (IncorrectSeatNumberException e) {
-//                System.out.println(e.getMessage());
-//
-//            } catch (InputMismatchException e){
-//                System.out.println("El número de seient ha de ser un enter");
-//                SC.nextLine();
-//            }
-//        } while (!validInput);
-//        return seatNumber;
-//    }
+
 }
 
 
