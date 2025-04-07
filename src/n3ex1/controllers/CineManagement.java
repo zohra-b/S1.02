@@ -87,7 +87,7 @@ public class CineManagement {
 
     }
 
-    public void bookSeat() throws OccupiedSeatException {
+    public void bookSeat() {
         boolean occupiedSeat;
         do {
             occupiedSeat = false;
@@ -96,14 +96,15 @@ public class CineManagement {
             try {
                 if (seatsManagement.searchSeat(row, seat) != -1) {
                     throw new OccupiedSeatException("Aquesta butaca ja esta ocupada");
-                } else {
-                    String user = enterUser();
-                    seatsManagement.addSeat(row, seat, user);
                 }
             } catch (OccupiedSeatException e) {
                 System.out.println(e.getMessage());
                 occupiedSeat = true;
+            } catch (AvailableSeatException e) {
+                String user = enterUser();
+                seatsManagement.addSeat(row, seat, user);
             }
+
         } while (occupiedSeat);
     }
 
